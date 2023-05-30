@@ -118,6 +118,8 @@ MonoBehaviour:
   cameraControllerPrefab: {fileID: 2304594832398217223, guid: 9f4e7cc7a344d478a91ba298eee36907,
     type: 3}
   force: 100
+  playerDisqPrefab: {fileID: 7958112979613362151, guid: 94c7fd6665e4f4737ae97d943882ca5b,
+    type: 3}
 --- !u!114 &3038259425781512027
 MonoBehaviour:
   m_ObjectHideFlags: 0

@@ -2,19 +2,25 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using Mirror;
+using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.EventSystems;
 
-public class PlayerController : NetworkBehaviour
+public class PlayerController : NetworkBehaviour, IPointerEnterHandler, IPointerExitHandler
 {
     private Rigidbody rb;
     private CameraController _cameraController;
     private InputReader _inputReader;
     private bool _canShoot = false;
+    private GameObject playerDisq;
 
     [SerializeField]
     private CameraController cameraControllerPrefab;
     [SerializeField]
     private float force = 10;
+    [SerializeField]
+    private GameObject playerDisqPrefab;
+
 
     private void Awake()
     {
@@ -28,6 +34,14 @@ public class PlayerController : NetworkBehaviour
         _inputReader = new InputReader();
         ListenInput();
         base.OnStartLocalPlayer();
+    }
+
+    private void LateUpdate()
+    {
+        if (playerDisq)
+        {
+            playerDisq.transform.position = transform.position;
+        }
     }
 
     private void ListenInput()
@@ -67,6 +81,33 @@ public class PlayerController : NetworkBehaviour
                 Vector3 force = -(_cameraController.transform.forward * direction.y + _cameraController.transform.right * direction.x) * (this.force * distance);
                 rb.velocity = force;
             }
+        }
+    }
+
+    public void OnPointerEnter(PointerEventData eventData)
+    {
+        if (isLocalPlayer)
+        {
+            OnMouseEnter();
+        }
+    }
+
+    public void OnMouseEnter()
+    {
+        playerDisq = Instantiate(playerDisqPrefab);
+        playerDisq.transform.position = transform.position;
+    }
+
+    public void OnMouseExit()
+    {
+        Destroy(playerDisq);
+    }
+
+    public void OnPointerExit(PointerEventData eventData)
+    {
+        if (isLocalPlayer)
+        {
+            OnMouseExit();
         }
     }
 }
